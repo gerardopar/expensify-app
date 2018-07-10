@@ -6,8 +6,7 @@ export const addExpense = (expense) => ({
   type: 'ADD_EXPENSE',
   expense
 });
-
-// firebase action generator
+// firebase addExpense action generator
 export const startAddExpense = (expenseData = {} ) => {
   return (dispatch) => {
     const {
@@ -33,7 +32,7 @@ export const removeExpense = ({ id } = {}) => ({
   type: 'REMOVE_EXPENSE',
   id
 });
-
+// firebase removeExpense action generator
 export const startRemoveExpense = ({ id } = {}) => {
   return (dispatch) => {
     return database.ref(`expenses/${id}`).remove().then(() => {
@@ -48,13 +47,21 @@ export const editExpense = (id, updates) => ({
   id,
   updates
 });
+// firebase editExpense action generator
+export const startEditExpense = (id, updates) => {
+  return (dispatch) => {
+    return database.ref(`expenses/${id}`).update(updates).then(() => {
+      dispatch(editExpense(id, updates));
+    });
+  }
+};
 
 //SET_EXPENSES
 export const setExpenses = (expenses) => ({
   type: 'SET_EXPENSES',
   expenses
 });
-
+// firebase setExpense action generator , fetches the data from the database
 export const startSetExpenses = () => {
   return(dispatch) => {
     return database.ref('expenses').once('value').then((snapshot) => {
